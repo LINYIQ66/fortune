@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Fortune</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            font-size: 1.5em;
+        }
+        .container {
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            width: 80%;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            line-height: 1.5;
+            color: #333;
+        }
+    </style>
+    <script>
+        async function getFortune() {
+            const color = document.getElementById('colorInput').value.trim();
+            if (!color) {
+                alert('Please enter a color!');
+                return;
+            }
+
+            const response = await fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_API_KEY_HERE'
+                },
+                body: JSON.stringify({
+                    model: 'text-davinci-003',
+                    prompt: `Give me a fun, personalized fortune for someone whose favorite color today is ${color}. Keep it under 200 characters and use emojis.`,
+                    max_tokens: 60
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('result').innerText = data.choices[0].text.trim();
+            } else {
+                document.getElementById('result').innerText = 'Oops! Something went wrong. Please try again later.';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>Today's Fortune 🌈</header>
+    <div class="container">
+        <p>Enter your favorite color of the day and discover your fortune! 🎨✨</p>
+        <input type="text" id="colorInput" placeholder="What's your color today?">
+        <br>
+        <button onclick="getFortune()">Reveal My Fortune 🔮</button>
+        <div class="result" id="result"></div>
+    </div>
+</body>
+</html>
