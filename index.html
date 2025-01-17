@@ -62,17 +62,12 @@
             }
 
             try {
-                const response = await fetch('https://api.openai.com/v1/completions', {
+                const response = await fetch('http://localhost:3000/api/fortune', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': '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'
                     },
-                    body: JSON.stringify({
-                        model: 'text-davinci-003',
-                        prompt: `Give me a fun, personalized fortune for someone whose favorite color today is ${color}. Keep it under 200 characters and use emojis.`,
-                        max_tokens: 60
-                    })
+                    body: JSON.stringify({ color })
                 });
 
                 if (response.ok) {
