@@ -61,24 +61,31 @@
                 return;
             }
 
-            const response = await fetch('https://api.openai.com/v1/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': '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'
-                },
-                body: JSON.stringify({
-                    model: 'o1',
-                    prompt: `Give me a fun, personalized fortune for someone whose favorite color today is ${color}. Keep it under 200 characters and use emojis.`,
-                    max_tokens: 60
-                })
-            });
+            try {
+                const response = await fetch('https://api.openai.com/v1/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': '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'
+                    },
+                    body: JSON.stringify({
+                        model: 'text-davinci-003',
+                        prompt: `Give me a fun, personalized fortune for someone whose favorite color today is ${color}. Keep it under 200 characters and use emojis.`,
+                        max_tokens: 60
+                    })
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                document.getElementById('result').innerText = data.choices[0].text.trim();
-            } else {
-                document.getElementById('result').innerText = 'Oops! Something went wrong. Please try again later.';
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('result').innerText = data.choices[0].text.trim();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
+                    document.getElementById('result').innerText = 'Error fetching fortune. Please try again later.';
+                }
+            } catch (error) {
+                console.error('Request failed:', error);
+                document.getElementById('result').innerText = 'Oops! Something went wrong. Please check your connection.';
             }
         }
     </script>
